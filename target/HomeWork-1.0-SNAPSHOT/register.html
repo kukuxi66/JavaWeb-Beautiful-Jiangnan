@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最美江南 - 注册</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: url(/img/zcbj.jpeg) no-repeat 0px 0px;
+        height: 100%;
+    }
+
+    #loginDiv {
+        width: 37%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 650px;
+        background-color: rgba(75, 81, 95, 0.3);
+        box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
+        border-radius: 5px;
+    }
+</style>
+
+<body>
+    <div id="loginDiv">
+        <form action="/HomeWork_war_exploded/Register" method="get">
+            <h1>最美江南 - 注册</h1>
+            <p>用户姓名:<input id="userName" name="userName" type="text"></p>
+
+            <p>用户密码:<input id="passWord" name="passWord" type="password"></p>
+
+            <p>确认密码:<input id="surePassword" name="surePassword" type="password"></p>
+
+            <p>
+                电子邮件:
+                <input id="email" type="email" name="Email">
+            </p>
+
+            <p style="text-align: center;">
+                <input type="submit" class="button" onblur="checkForm()" onclick="return submitT()" value="提交">
+                <input type="reset" class="button" value="重置">
+            </p>
+        </form>
+    </div>
+
+
+</body>
+
+
+
+
+
+</html>

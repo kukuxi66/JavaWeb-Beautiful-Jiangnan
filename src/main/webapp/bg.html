@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1" id="userTable">
+    <tr>
+        <td>
+            1
+        </td>
+        <td>
+            2
+        </td>
+        <td>
+            3
+        </td>
+    </tr>
+    <tr>
+        <td>
+            4
+        </td>
+        <td>
+            5
+        </td>
+        <td>
+            6
+        </td>
+    </tr>
+    <tr>
+        <td>
+            7
+        </td>
+        <td>
+            8
+        </td>
+        <td>
+            9
+        </td>
+    </tr>
+</table>
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script>
+
+    window.onload = function (){
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/LoginServlet"
+        }).then(function (resp){
+            let users = resp.data;
+            let tableData = "    <tr>\n" +
+                "        <td>\n" +
+                "            ID\n" +
+                "        </td>\n" +
+                "        <td>\n" +
+                "            用户名\n" +
+                "        </td>\n" +
+                "        <td>\n" +
+                "            密码\n" +
+                "        </td>\n" +
+                "    </tr>";
+            for(let i=0;i<users.length;i++){
+                let user = users[i];
+                tableData += "    <tr>\n" +
+                    "        <td>\n" +
+                    "            "+(i+1)+"\n" +
+                    "        </td>\n" +
+                    "        <td>\n" +
+                    "            "+user.userName+"\n" +
+                    "        </td>\n" +
+                    "        <td>\n" +
+                    "            "+user.passWord+"\n" +
+                    "        </td>\n" +
+                    "    </tr>";
+
+            }
+            document.getElementById("userTable").innerHTML=tableData;
+        })
+    }
+
+</script>
+
+</body>
+</html>

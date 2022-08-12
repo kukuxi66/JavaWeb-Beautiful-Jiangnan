@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="WEB">
+    <output-path>$PROJECT_DIR$/out/artifacts/WEB</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="HomeWork" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-8.0.29" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.31" />
+          <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.5" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.29" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.19.4" />
+        </element>
+      </element>
+      <element id="library" level="project" name="fastjson-1.2.49" />
+      <element id="javaee-facet-resources" facet="HomeWork/web/Web" />
+    </root>
+  </artifact>
+</component>

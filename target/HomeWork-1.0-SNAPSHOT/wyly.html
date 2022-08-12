@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最美江南-我要留言</title>
+    <link rel="stylesheet" href="css/css.css">
+    <link rel="stylesheet" href="css/wyly.css">
+    <link rel="stylesheet" href="css/xkly.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="login">
+            <form action="/HomeWork_war_exploded/LoginServlet" method="Post" id="form">
+                用户名: <input type="text" name="userName" id="userName">
+                密码: <input type="text" name="passWord" id="passWord">
+                <button type="submit" onclick="loginbtn();"></button>
+                <p id="loginerror" style="color: red;font-size: 18px"></p>
+                <a href="register.html" style="text-decoration-line: none;color: #720017;">还没有账号？点我注册新账号</a>
+            </form>
+            <p id="loginsuccess" style="color: red;font-size: 18px"></p>
+        </div>
+
+        <div class="bt">
+            <ul>
+                <li><a href="index.html">查看留言</a></li>
+                <li><a href="wyly.html">发布留言</a></li>
+                <li><a href="xgly.html">修改留言</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="main w">
+        <div class="left">
+            <img src="img/lynr.png" alt="lynr.png">
+            <hr>
+            <div class="font">
+                <ul id="News">
+
+                </ul>
+            </div>
+            <div class="wyly">
+                <div class="ft">
+
+                    <form action="/HomeWork_war_exploded/Release" method="post" name="Releaser">
+                        <p>主题： <input type="text" name="zt" id="zt"> </p>
+                        <p class="nr">内容：</p><textarea type="text" name="nr" id="nr"></textarea>
+                        <p class="bq"><img src="img/bq.png" alt="bq.png"></p>
+                        <p class="fb"><img src="img/fb.png" alt="fb.png" onclick="javascript:fsubmit(document.Releaser);"></p>
+                    </form>
+                </div>
+            </div>
+            <div class="b">
+                <ul>
+                    <li><a href="#" onclick="lastpage();">上一页</a></li>
+                    <li><a href="#" onclick="nextpage();">下一页</a></li>
+                    <li><a href="#" onclick="home();">首页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script>
+    function lastpage(){
+        if(Number(sessionStorage.getItem("num"))>1){
+            sessionStorage.setItem("num",(Number(sessionStorage.getItem("num"))-1).toString());
+            window.location.href="wyly.html";
+        }else{
+            sessionStorage.setItem("num","1");
+        }
+    }
+
+    function nextpage(){
+        if(Number(sessionStorage.getItem("num"))>=1){
+            sessionStorage.setItem("num",(Number(sessionStorage.getItem("num"))+1).toString());
+            window.location.href="wyly.html";
+        }
+        else{
+            sessionStorage.setItem("num","1");
+        }
+    }
+
+    function home(){
+        sessionStorage.setItem("num","1");
+        window.location.href="wyly.html";
+    }
+
+    function fsubmit(obj){
+        obj.submit();
+    }
+    window.onload = function (){
+        if(sessionStorage.getItem("num")==null){
+            sessionStorage.setItem("num","1");
+        }
+
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/SelectNews"
+        }).then(function (resp){
+            let newss = resp.data;
+            let tableData="";
+            let num;
+            if((Number(sessionStorage.getItem("num")))*15>newss.length){
+                num=newss.length;
+            }else{
+                num=(Number(sessionStorage.getItem("num")))*15;
+            }
+            for(let i = (Number(sessionStorage.getItem("num"))-1)*15;i<num;i++){
+                let news = newss[i];
+                tableData += "                <li id='tData' onclick='news("+i+");' data-index="+i+"><img src=\"img/list.png\" alt=\"list.png\"><a href=\"#\">"+news.news+" <span>"+news.date+"</span> </a>";
+            }
+            document.getElementById("News").innerHTML=tableData;
+        })
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/logincheck"
+        }).then(function (resp){
+            let data = resp.data;
+            var form = document.getElementById("form");
+            if(data=="登录成功"){
+                form.style.display="none";
+                document.getElementById("loginsuccess").innerHTML="登录成功，欢迎您！" + "<a href='/HomeWork_war_exploded/logout'>注销</a>";
+            }
+        })
+    }
+    var form= document.getElementById("form");
+    form.addEventListener("submit",function (evt){
+        evt.preventDefault();
+    })
+    function loginbtn(){
+        var Un=document.getElementById("userName");
+        var Pw=document.getElementById("passWord");
+        axios({
+            url: "http://localhost:8082/HomeWork_war_exploded/LoginServlet",
+            method: "Post",
+            params: {
+                userName:Un.value,
+                passWord:Pw.value
+            }
+        }).then(function (resp){
+            let data = resp.data;
+            if(data=="登录成功") {
+                var form = document.getElementById("form");
+                form.style.display="none";
+                document.getElementById("loginsuccess").innerHTML="登录成功，欢迎您！" + "<a href='/HomeWork_war_exploded/logout'>注销</a>";
+            }
+            else{
+                document.getElementById("loginerror").innerHTML=data;
+            }
+        })
+    }
+
+</script>
+
+</html>

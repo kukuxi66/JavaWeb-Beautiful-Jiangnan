@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最美江南</title>
+    <link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+<div class="header">
+    <div class="login">
+        <form action="/HomeWork_war_exploded/LoginServlet" method="Post" id="form">
+                用户名: <input type="text" name="userName" id="userName">
+                密码: <input type="text" name="passWord" id="passWord">
+                <button type="submit" onclick="loginbtn();"></button>
+                <p id="loginerror" style="color: red;font-size: 18px"></p>
+                <a href="register.html" style="text-decoration-line: none;color: #720017;">还没有账号？点我注册新账号</a>
+        </form>
+        <p id="loginsuccess" style="color: red;font-size: 18px"></p>
+    </div>
+    <div class="bt">
+        <ul>
+            <li><a href="index.html">查看留言</a></li>
+            <li><a href="wyly.html">发布留言</a></li>
+            <li><a href="xgly.html">修改留言</a></li>
+        </ul>
+    </div>
+</div>
+<div class="main w">
+    <div class="left">
+        <img src="img/lynr.png" alt="lynr.png">
+        <hr>
+        <div class="font">
+            <ul id="News">
+
+            </ul>
+        </div>
+        <div class="ckly">
+            <div class="ft">
+                <p id="zhuti">主题： <span></span> </p>
+                <p id="zuozhe">作者： <span></span> </p>
+                <p id="riqi">日期： <span></span> </p>
+                <p id="neirong">内容： <span></span> </p>
+                <p class="hf">回复：<span>已经将您的咨询转到市长信箱处理，请您留意查看相关部门回复信息！</span> </p>
+            </div>
+
+        </div>
+        <div class="b">
+            <ul>
+                <li><a href="#" onclick="lastpage();">上一页</a></li>
+                <li><a href="#" onclick="nextpage();">下一页</a></li>
+                <li><a href="#" onclick="home();">首页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script>
+
+    function lastpage(){
+        if(Number(sessionStorage.getItem("num"))>1){
+            sessionStorage.setItem("num",(Number(sessionStorage.getItem("num"))-1).toString());//若页码数Num大于1，则每点击一次-1
+            window.location.href="index.html";
+        }else{
+            sessionStorage.setItem("num","1");//否则直接设置为1(首页)
+        }
+    }
+
+    function nextpage(){
+        if(Number(sessionStorage.getItem("num"))>=1){
+            sessionStorage.setItem("num",(Number(sessionStorage.getItem("num"))+1).toString());//若页码数Num大于1，则每点击一次+1
+            window.location.href="index.html";
+        }
+        else{
+            sessionStorage.setItem("num","1");
+        }
+    }
+
+    function home(){
+        sessionStorage.setItem("num","1");
+        window.location.href="index.html";
+    }
+
+    window.onload = function (){
+        if(sessionStorage.getItem("num")==null){
+            sessionStorage.setItem("num","1");
+        } //获取是否有页码数num存在，若为空，则设置页码数num为1
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/SelectNews"//用axios，向后端提交，利用get方式
+        }).then(function (resp){
+            let newss = resp.data;
+            let tableData="";//将传回来的resp.data给newss，里面包括从数据库获取到的json集合
+            let num;
+            if((Number(sessionStorage.getItem("num")))*15>newss.length){
+                num=newss.length;//获取当前页面要显示的新闻数量num，若num大于json集合里的所有长度(数据库记录数)，则将要显示的数量Num设置为json的长度
+            }else{
+                num=(Number(sessionStorage.getItem("num")))*15;//否则直接将页面一次要显示的新闻数量设置为15(因为一次要显示15个新闻数量)
+            }
+            //for(let i = (Number(sessionStorage.getItem("num"))-1)*15;i<num;i++){
+            for(let i = num-1;i>=(Number(sessionStorage.getItem("num"))-1)*15;i--){
+                console.log(i);
+                let news = newss[i];
+                tableData += "                <li id='tData' onclick='news("+i+");' data-index="+i+"><img src=\"img/list.png\" alt=\"list.png\"><a href=\"#\">"+news.news+" <span>"+news.date+"</span> </a>";
+            }//循环从0开始，一直到num-1，每次循环把集合newss里的值给news，在把news中的数据存入到tableData
+            document.getElementById("News").innerHTML=tableData;//再把tableData中的数据放入到网页中
+        })
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/logincheck"
+        }).then(function (resp){
+            let data = resp.data;
+            var form = document.getElementById("form");
+            if(data=="登录成功"){
+                form.style.display="none";
+                document.getElementById("loginsuccess").innerHTML="登录成功，欢迎您！" + "<a href='/HomeWork_war_exploded/logout'>注销</a>";
+            }
+        })
+    }
+
+    function news(s){
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/QueNewsinfo"
+        }).then(function (resp){
+            //获取传来的json集合到data
+            let data = resp.data;
+            var neirong = document.getElementById("neirong");
+            var zhuti = document.getElementById("zhuti");
+            var riqi = document.getElementById("riqi");
+            var zuozhe = document.getElementById("zuozhe")
+            for(let i=0;i<data.length;i++){
+                let news = data[i];
+                if (i==s){
+                    //获取每个集合中的值，并存入到网页中
+                    neirong.innerHTML="<p id=\"neirong\">内容： <span>"+news.content+"</span> </p>";
+                    zhuti.innerHTML="<p id=\"zhuti\">主题： <span>"+news.news+"</span> </p>";
+                    riqi.innerHTML="<p id=\"riqi\">日期： <span>"+news.date+"</span> </p>";
+                    zuozhe.innerHTML="<p id=\"zuozhe\">作者： <span>"+news.userName+"</span> </p>"
+                    break;
+                }
+            }
+        })
+
+    }
+
+    var form= document.getElementById("form");
+    form.addEventListener("submit",function (evt){
+        evt.preventDefault();
+    })
+    function loginbtn(){
+        //获取表单中的用户名、密码
+        var Un=document.getElementById("userName");
+        var Pw=document.getElementById("passWord");
+
+        //用axios将用户名密码发送至后端
+        axios({
+            url: "http://localhost:8082/HomeWork_war_exploded/LoginServlet",
+            method: "Post",
+            params: {
+                userName:Un.value,
+                passWord:Pw.value
+            }
+        }).then(function (resp){
+            //获取返回的数据resp.data
+            let data = resp.data;
+            //若返回为登录成功
+            if(data=="登录成功") {
+                var form = document.getElementById("form");
+                form.style.display="none";
+                document.getElementById("loginsuccess").innerHTML="登录成功，欢迎您！" + "<a href='/HomeWork_war_exploded/logout'>注销</a>";
+                //获取表单，将表单隐藏，设置此区域为“登录成功....”字样
+            }
+            //若返回为登录失败
+            else{
+                document.getElementById("loginerror").innerHTML=data;
+                //将此区域显示为“登录失败”字样
+            }
+        })
+    }
+
+</script>
+
+
+</body>
+</html>

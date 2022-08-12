@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最美江南-修改留言</title>
+    <link rel="stylesheet" href="css/css.css">
+    <link rel="stylesheet" href="css/xkly.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="login">
+            <form action="/HomeWork_war_exploded/LoginServlet" method="Post" id="form">
+                用户名: <input type="text" name="userName" id="userName">
+                密码: <input type="text" name="passWord" id="passWord">
+                <button type="submit" onclick="loginbtn();"></button>
+                <p id="loginerror" style="color: red;font-size: 18px"></p>
+                <a href="register.html" style="text-decoration-line: none;color: #720017;">还没有账号？点我注册新账号</a>
+            </form>
+            <p id="loginsuccess" style="color: red;font-size: 18px"></p>
+        </div>
+        <div class="bt">
+            <ul>
+                <li><a href="index.html">查看留言</a></li>
+                <li><a href="wyly.html">发布留言</a></li>
+                <li><a href="xgly.html">修改留言</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="main w">
+        <div class="left">
+            <img src="img/lynr.png" alt="lynr.png">
+            <hr>
+            <div class="font">
+                <ul id="News">
+
+                </ul>
+            </div>
+            <div class="xgly">
+                <div class="ft">
+                    <form name="Update" id="upd" action="/HomeWork_war_exploded/update">
+                        <p id="zhuti">主题： <span></span> </p>
+                        <p id="zuozhe">作者： <span></span> </p>
+                        <p id="riqi">日期： <span></span> </p>
+                        <p class="nr" id="neirong">内容：</p><textarea type="text" id="neirong2"></textarea>
+                        <button onclick="update();"></button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="b">
+                <ul>
+                    <li><a href="#" onclick="lastpage();">上一页</a></li>
+                    <li><a href="#" onclick="nextpage();">下一页</a></li>
+                    <li><a href="#" onclick="home();">首页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script>
+
+    function lastpage(){
+        if(Number(sessionStorage.getItem("num"))>1){
+            sessionStorage.setItem("num",(Number(sessionStorage.getItem("num"))-1).toString());
+            window.location.href="xgly.html";
+        }else{
+            sessionStorage.setItem("num","1");
+        }
+    }
+
+    function nextpage(){
+        if(Number(sessionStorage.getItem("num"))>=1){
+            sessionStorage.setItem("num",(Number(sessionStorage.getItem("num"))+1).toString());
+            window.location.href="xgly.html";
+        }
+        else{
+            sessionStorage.setItem("num","1");
+        }
+    }
+
+    function home(){
+        sessionStorage.setItem("num","1");
+        window.location.href="xgly.html";
+    }
+
+    var form= document.getElementById("form");
+    form.addEventListener("submit",function (evt){
+        evt.preventDefault();
+    })
+    var form2= document.getElementById("upd");
+    form2.addEventListener("submit",function (evt){
+        evt.preventDefault();
+    })
+
+    window.onload = function (){
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/SelectNews"
+        }).then(function (resp){
+            let newss = resp.data;
+            let tableData="";
+            let num;
+            if((Number(sessionStorage.getItem("num")))*15>newss.length){
+                num=newss.length;
+            }else{
+                num=(Number(sessionStorage.getItem("num")))*15;
+            }
+            for(let i = (Number(sessionStorage.getItem("num"))-1)*15;i<num;i++){
+                let news = newss[i];
+                tableData += "                <li id='tData' onclick='news("+i+");' data-index="+i+"><img src=\"img/list.png\" alt=\"list.png\"><a href=\"#\">"+news.news+" <span>"+news.date+"</span> </a>";
+            }
+            document.getElementById("News").innerHTML=tableData;
+        })
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/logincheck"
+        }).then(function (resp){
+            let data = resp.data;
+            var form = document.getElementById("form");
+            if(data=="登录成功"){
+                form.style.display="none";
+                document.getElementById("loginsuccess").innerHTML="登录成功，欢迎您！" + "<a href='/HomeWork_war_exploded/logout'>注销</a>";
+            }
+
+
+        })
+    }
+    function update(){
+        var zhuti=document.getElementById("zhuti2");
+        var zuozhe = document.getElementById("zuozhe2");
+        var neirong=document.getElementById("neirong2");
+        axios({
+            url: "http://localhost:8082/HomeWork_war_exploded/update",
+            method: "Get",
+            params: {
+                //内容 主题 作者 传到后端
+                nr:neirong.value,
+                zt:zhuti.innerText,
+                zz:zuozhe.innerText
+            }
+        }).then(function (resp){
+            let data = resp.data;
+            //提示传回的内容
+            alert(data);
+        })
+    }
+    function news(s){
+        axios({
+            method:"Get",
+            url:"http://localhost:8082/HomeWork_war_exploded/QueNewsinfo"
+        }).then(function (resp){
+            let data = resp.data;
+            var neirong = document.getElementById("neirong");
+            var zhuti = document.getElementById("zhuti");
+            var riqi = document.getElementById("riqi");
+            var zuozhe = document.getElementById("zuozhe")
+            for(let i=0;i<data.length;i++){
+                let news = data[i];
+                if (i==s){
+                    zhuti.innerHTML="<p id=\"zhuti\">主题： <span id=\"zhuti2\">"+news.news+"</span> </p>";
+                    riqi.innerHTML="<p id=\"riqi\">日期： <span id=\"riqi2\">"+news.date+"</span> </p>";
+                    zuozhe.innerHTML="<p id=\"zuozhe\">作者： <span id=\"zuozhe2\">"+news.userName+"</span> </p>"
+                    break;
+                }
+
+
+            }
+        })
+    }
+
+
+
+
+    function loginbtn(){
+        var Un=document.getElementById("userName");
+        var Pw=document.getElementById("passWord");
+        axios({
+            url: "http://localhost:8082/HomeWork_war_exploded/LoginServlet",
+            method: "Post",
+            params: {
+                userName:Un.value,
+                passWord:Pw.value
+            }
+        }).then(function (resp){
+            let data = resp.data;
+            if(data=="登录成功") {
+                var form = document.getElementById("form");
+                form.style.display="none";
+                document.getElementById("loginsuccess").innerHTML="登录成功，欢迎您！" + "<a href='/HomeWork_war_exploded/logout'>注销</a>";
+            }
+            else{
+                document.getElementById("loginerror").innerHTML=data;
+            }
+        })
+    }
+
+</script>
+
+</html>

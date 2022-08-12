@@ -1,0 +1,188 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.w {
+    width: 1075px;
+}
+
+.header {
+    margin: 0 auto;
+    height: 184px;
+    width: 100%;
+    background-image: url(../img/header.png);
+    background-size: 100% 100%;
+}
+
+.header .login {
+    float: right;
+    font-size: 13px;
+    width: 400px;
+    height: 30px;
+    margin-right: 195px;
+}
+
+.header .login input {
+    margin-top: 5px;
+    width: 120px;
+}
+
+.header .login button {
+    display: block;
+    float: right;
+    margin-right: 12px;
+    margin-top: 3px;
+    width: 52px;
+    height: 22px;
+    background-image: url(../img/login.png);
+    background-size: 100% 100%;
+}
+
+.header .bt ul {
+    margin-left: 253px;
+}
+
+.header .bt ul li {
+    float: left;
+    height: 28px;
+    margin: 140px 5px 0px 0px;
+    list-style-type: none;
+    background-color: #333333;
+}
+
+.header .bt ul li a {
+    font-size: 5px;
+    padding: 0 15px;
+    line-height: 28px;
+    color: white;
+    text-decoration: none;
+}
+
+.header .bt ul li a:hover {
+    color: skyblue;
+}
+
+.main {
+    margin-left: 253px;
+    height: 548px;
+}
+
+.main .font {
+    float: left;
+    width: 685px;
+}
+
+.main .left img {
+    margin-top: 24px;
+    margin-left: 15px;
+}
+
+.main .left hr {
+    width: 688px;
+}
+
+.main .left .font ul {
+    margin-top: 5px;
+    margin-left: 1px;
+}
+
+.main .left .font ul li {
+    height: 20px;
+    padding: 0px 0px 10px 0px;
+    list-style-type: none;
+}
+
+.main .left .font ul li:nth-child(2n-1) {
+    background-color: #f2f2f2;
+}
+
+.main .left .font ul li:hover {
+    background-color: #f0d7d2;
+}
+
+.main .left .font ul li a {
+    margin-left: 10px;
+    line-height: 30px;
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+.main .left .font ul li img {
+    margin-top: 12px;
+    vertical-align: top;
+    width: 5px;
+    height: 5px;
+}
+
+.main .left .font ul li span {
+    float: right;
+    margin-right: 5px;
+}
+
+.main .ckly {
+    position: relative;
+    float: right;
+    background-image: url(../img/ckly.png);
+    background-size: 100% 100%;
+    height: 545px;
+    width: 410px;
+    margin-top: -57px;
+    margin-right: -20px;
+}
+
+.main .ckly .ft {
+    float: left;
+    margin-top: 60px;
+    margin-left: 35px;
+}
+
+.main .ckly .ft p {
+    margin-bottom: 15px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.main .ckly .ft span {
+    display: block;
+    float: right;
+    width: 300px;
+    font-weight: 400;
+    font-size: 14px;
+    color: #333333;
+}
+
+.main .ckly .ft .hf {
+    margin-top: 100px;
+}
+
+.main .ckly .ft .hf span {
+    font-weight: bold;
+    font-size: 15px;
+    color: #720017;
+}
+
+.main .b ul {
+    margin-left: 480px;
+}
+
+.main .b ul li {
+    float: left;
+    height: 28px;
+    margin: 5px 5px 0px 0px;
+    list-style-type: none;
+    background-color: #333333;
+}
+
+.main .b ul li a {
+    font-size: 5px;
+    padding: 0px 15px;
+    line-height: 28px;
+    color: white;
+    text-decoration: none;
+}
+
+.main .b ul li a:hover {
+    color: skyblue;
+}

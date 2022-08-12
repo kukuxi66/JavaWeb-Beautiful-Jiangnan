@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="WEB-INF">
+    <output-path>$PROJECT_DIR$/out/artifacts/WEB_INF</output-path>
+    <root id="archive" name="WEB-INF.war">
+      <element id="directory" name="WEB-INF1">
+        <element id="module-output" name="HomeWork" />
+      </element>
+    </root>
+  </artifact>
+</component>
